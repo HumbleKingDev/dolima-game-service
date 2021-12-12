@@ -8,10 +8,10 @@ import { PlayersService } from './players.service';
 export class PlayersController {
   constructor(private service: PlayersService) {}
 
-  @Get()
-  async findAll() {
-    return this.service.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.service.findAll();
+  // }
 
   @Post()
   async create(@Body() player: PlayersDto) {

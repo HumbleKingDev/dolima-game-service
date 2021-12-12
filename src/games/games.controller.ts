@@ -9,29 +9,29 @@ import { GamesService } from './games.service';
 export class GamesController {
   constructor(private service: GamesService) {}
 
-  @Get()
-  async findAll() {
-    return this.service.findAll();
-  }
+  // @Get()
+  // async findAll() {
+  //   return this.service.findAll();
+  // }
 
-  @Post()
-  async create(@Body() newGame: NewGameDto) {
-    return this.service.create(newGame);
-  }
+  // @Post()
+  // async create(@Body() newGame: NewGameDto) {
+  //   return this.service.create(newGame);
+  // }
 
-  @Get(':code')
-  async findOne(@Param('code') code: string) {
-    if (!isValidGameCode(code)) {
-      throw new InvalidCodeException('Game code is incorrect!');
-    }
-    return this.service.findOne(code);
-  }
+  // @Get(':code')
+  // async findOne(@Param('code') code: string) {
+  //   if (!isValidGameCode(code)) {
+  //     throw new InvalidCodeException('Game code is incorrect!');
+  //   }
+  //   return this.service.findOne(code);
+  // }
 
-  @Patch(':code')
-  async update(@Param('code') code: string, @Body() updateGame: UpdateGameDto) {
-    if (!isValidGameCode(code)) {
-      throw new InvalidCodeException('Game code is incorrect!');
-    }
-    return this.service.update(code, updateGame);
-  }
+  // @Patch(':code')
+  // async update(@Param('code') code: string, @Body() updateGame: UpdateGameDto) {
+  //   if (!isValidGameCode(code)) {
+  //     throw new InvalidCodeException('Game code is incorrect!');
+  //   }
+  //   return this.service.update(code, updateGame);
+  // }
 }
