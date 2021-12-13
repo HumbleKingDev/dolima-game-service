@@ -57,8 +57,8 @@ export class PlayersService {
       if (!canPlayGame) {
         return fail({
           code: HttpStatus.NOT_MODIFIED,
-          message: `You have already played this game`,
-          error: 'You have already played this game',
+          message: `Vous avez déjà joué à ce jeu.`,
+          error: 'Vous avez déjà joué à ce jeu.',
         });
       }
       const oldPlayerNumberInGame = this.__getOldAssignedNumberInGame(
@@ -112,7 +112,7 @@ export class PlayersService {
           pcw: giftToWin?.success ? 1 : 0,
           ...(giftToWin?.success && {
             gft: giftToWin?.giftNumber,
-          })
+          }),
         },
       });
     } catch (error) {
@@ -148,8 +148,8 @@ export class PlayersService {
       if (!this.__neverPlayedGame(player, gameId)) {
         return fail({
           code: HttpStatus.NOT_MODIFIED,
-          message: `You have already played this game.`,
-          error: 'You have already played this game.',
+          message: `Vous avez déjà joué à ce jeu.`,
+          error: 'Vous avez déjà joué à ce jeu.',
         });
       }
 
@@ -162,7 +162,7 @@ export class PlayersService {
           error: 'Bad request',
         });
       }
-      
+
       const gamesPlayed: any[] = player.gamesPlayed;
       gamesPlayed.push({
         playerNumber,
@@ -203,12 +203,10 @@ export class PlayersService {
         gamesWon,
       };
       const options = { upsert: true, new: true, setDefaultsOnInsert: true };
-      await this.model.findOneAndUpdate(
-        query,
-        update,
-        options,
-      );
-      const message = giftToWin ? `Congrats ${player.fullName} you win: ${giftToWin.name}!!!` : 'Thanks for playing this game. Good Luck for next time'
+      await this.model.findOneAndUpdate(query, update, options);
+      const message = giftToWin
+        ? `BRAVO  ${player.fullName} Vous êtes l’heureux gagnant de ce lot ! Nous vous contacterons très vite.`
+        : "Désolé, vous n'avez rien gagné!";
       return succeed({
         code: HttpStatus.OK,
         message,
@@ -216,7 +214,7 @@ export class PlayersService {
       });
     } catch (error) {
       throw new HttpException(
-        `Error while confirm player. Try again.`,
+        `Une erreur est survenue. Merci de réssayer.`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
