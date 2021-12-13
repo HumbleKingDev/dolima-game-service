@@ -285,7 +285,7 @@ export class GamesService {
         (Math.abs(currentDate.getTime() - gift.from?.getTime()) / (1000 * 60)) %
         60;
       const minutes = parseInt(result.toString());
-      if (minutes > 15 && gift.state === EGiftState.WAITING_TO_WIN) {
+      if (minutes > 5 && gift.state === EGiftState.WAITING_TO_WIN) {
         await this.__updateGiftState(gift.code, {
           state: EGiftState.DEFAULT,
           player: null,
