@@ -14,10 +14,10 @@ export class GamesController {
   //   return this.service.findAll();
   // }
 
-  @Post()
-  async create(@Body() newGame: NewGameDto) {
-    return this.service.create(newGame);
-  }
+  // @Post()
+  // async create(@Body() newGame: NewGameDto) {
+  //   return this.service.create(newGame);
+  // }
 
   // @Get(':code')
   // async findOne(@Param('code') code: string) {
