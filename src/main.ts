@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(
     rateLimit({
-      windowMs: 50 * 60 * 1000, // 
+      windowMs: 10 * 60 * 1000, // 
       max: 15, // limit each IP to 100 requests per windowMs
     }),
   );
