@@ -206,7 +206,7 @@ export class PlayersService {
       await this.model.findOneAndUpdate(query, update, options);
       const message = giftToWin
         ? `BRAVO  ${player.fullName} Vous êtes l’heureux gagnant de ce lot ! Nous vous contacterons très vite.`
-        : "Désolé, vous n'avez rien gagné!";
+        : "Désolé, vous n'avez pas gagné!";
       return succeed({
         code: HttpStatus.OK,
         message,
