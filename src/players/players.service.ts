@@ -306,7 +306,7 @@ export class PlayersService {
     gameWinners: number,
     expectedWinners: number,
   ) {
-    return playerNumber % 100 === 0 && gameWinners < expectedWinners;
+    return playerNumber % 200 === 0 && gameWinners < expectedWinners;
   }
 
   async __addToWonGame(idPlayer: string, idGame: string) {
