@@ -17,7 +17,7 @@ services:
     environment:
       NODE_ENV: development
     networks:
-      - dolima_game-follow-up-network
+      - dolima-game-follow-up-network
   
   mongodb:
     image : mongo:latest
