@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.development
+    ports:
+      - "3001:3000"
+    depends_on:
+      - mongodb
+    command: npm run start:dev
+    volumes:
+      - .:/usr/src/dolima_game
+      - /usr/src/dolima_game/node_modules
+
+    environment:
+      NODE_ENV: development
+    networks:
+      - dolima_game-follow-up-network
+  
+  mongodb:
+    image : mongo:latest
+    container_name: dolima_game_db
+    volumes:
+      - mongodata:/data/dolima_game-follow-up-db
+    ports:
+      - 27017:27017
+    networks:
+      - dolima-game-follow-up-network
+    restart: always
+
+volumes:
+  mongodata: 
+  
+
+networks:
+  dolima-game-follow-up-network:
+    driver: bridge
