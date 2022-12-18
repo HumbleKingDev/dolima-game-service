@@ -15,6 +15,9 @@ export class Players {
   @Prop({ type: String, required: true, unique: true })
   phoneNumber: string;
 
+  @Prop({ type: String, required: true, unique: true })
+  email: string;
+
   @Prop({ type: String, default: '' })
   additionalInfos: string;
 

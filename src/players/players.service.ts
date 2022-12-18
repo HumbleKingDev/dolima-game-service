@@ -83,6 +83,7 @@ export class PlayersService {
       const update = {
         fullName: newPlayer.fullName,
         gamesRegistered: gamesRegistered,
+        email: newPlayer.email,
       };
       const options = { upsert: true, new: true, setDefaultsOnInsert: true };
       player = await this.model.findOneAndUpdate(query, update, options);
