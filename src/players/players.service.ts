@@ -48,6 +48,7 @@ export class PlayersService {
         });
       }
       let player = await this.__findByPhoneNumber(newPlayer.phoneNumber);
+
       let canPlayGame = true;
       if (player) {
         canPlayGame = player.gamesPlayed.every(
