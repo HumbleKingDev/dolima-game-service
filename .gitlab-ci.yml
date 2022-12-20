@@ -69,4 +69,4 @@ deploy-to-prod:
  #  - main
   environment:
     name: production
-    url: http://game-service.laiterieduberger.sn
+    url: http://game-service.dolima.net
