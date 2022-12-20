@@ -69,4 +69,4 @@ deploy-to-prod:
  #  - main
   environment:
     name: production
-    url: http://game-service.dolima.net
+    url: https://game-service.dolima.net
