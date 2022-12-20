@@ -12,24 +12,10 @@ services:
       - "9229:9229"
     networks:
       - dolima-game-service
-    depends_on:
-      - mongodb
+
     volumes:
       - /usr/src/rearing/node_modules
     restart: unless-stopped
-
-  mongodb:
-    image : mongo:latest
-    volumes:
-      - mongodata:/data/rearing-follow-up-db-prod
-    ports:
-      - 27017:27017
-    networks:
-      - dolima-game-service
-    restart: always
-
-volumes:
-  mongodata: 
 
 networks:
   dolima-game-service:
