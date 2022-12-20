@@ -19,7 +19,7 @@ build:
     - docker-compose -f docker-compose.prod.yml build
     - docker push --all-tags $CI_REGISTRY_IMAGE
 
-deploy-to-preprod:
+.deploy-to-preprod:
   stage: deploy preprod
   image: docker:20.10.17
   services:
@@ -45,7 +45,7 @@ deploy-to-preprod:
 #    name: preproduction
 #    url: http://api-suivi-elevage-stage.laiterieduberger.sn
 
-.deploy-to-prod:
+deploy-to-prod:
   stage: deploy prod
   image: docker:20.10.17
   services:
@@ -62,9 +62,9 @@ deploy-to-preprod:
     - eval $(ssh-agent -s)
     - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-    - docker-compose -H "ssh://$SERVER_USER@$PROD_SERVER_IP" -f docker-compose.prod.yml down --remove-orphans
-    - docker-compose -H "ssh://$SERVER_USER@$PROD_SERVER_IP" -f docker-compose.prod.yml pull 
-    - docker-compose -H "ssh://$SERVER_USER@$PROD_SERVER_IP" -f docker-compose.prod.yml up -d
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml down --remove-orphans
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml pull 
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml up -d
   only:
    - main
   #environment:
