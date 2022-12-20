@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 
 import { InvalidCodeException } from '../exceptions/invalid-code-exception';
@@ -14,10 +15,10 @@ export class GamesController {
   //   return this.service.findAll();
   // }
 
-  @Post()
-  async create(@Body() newGame: NewGameDto) {
-    return this.service.create(newGame);
-  }
+  // @Post()
+  // async create(@Body() newGame: NewGameDto) {
+  //   return this.service.create(newGame);
+  // }
 
   // @Get(':code')
   // async findOne(@Param('code') code: string) {

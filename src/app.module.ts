@@ -15,7 +15,7 @@ import { PlayersModule } from './players/players.module';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('LOCAL_DB'),
+        uri: configService.get<string>('DB_URL'),
       }),
       inject: [ConfigService],
     }),
