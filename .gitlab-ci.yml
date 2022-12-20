@@ -4,28 +4,12 @@ variables:
   IMAGE_TAG: "1.0"
   
 stages:
-  - build preprod
-  - build prod
-  - scan
-  - deploy dev
+  - build
   - deploy preprod
   - deploy prod
 
-build-preprod:
-  stage: build preprod
-  image: docker:20.10.17
-  services:
-    - docker:20.10.17-dind
-  before_script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-  script:
-    - docker-compose -f docker-compose.preprod.yml build
-    - docker push --all-tags $CI_REGISTRY_IMAGE
-#  only:
-#  - preprod
-
-.build-prod:
-  stage: build prod
+build:
+  stage: build
   image: docker:20.10.17
   services:
     - docker:20.10.17-dind
@@ -34,8 +18,6 @@ build-preprod:
   script:
     - docker-compose -f docker-compose.prod.yml build
     - docker push --all-tags $CI_REGISTRY_IMAGE
-  only:
-  - main
 
 deploy-to-preprod:
   stage: deploy preprod
@@ -54,9 +36,9 @@ deploy-to-preprod:
     - eval $(ssh-agent -s)
     - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml down --remove-orphans 
-    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml pull
-    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml up -d
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.prod.yml down --remove-orphans 
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.prod.yml pull
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.prod.yml up -d
 #  only:
 #  - preprod
 #  environment:
