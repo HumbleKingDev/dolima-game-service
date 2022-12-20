@@ -9,13 +9,21 @@ export class PlayersMiddleware implements NestMiddleware {
       req.headers['dg-v2-2022-app-id-store']?.length > 0 &&
       req.headers['dg-v2-2022-content-disposition']?.length === 13 && 
       req.headers['dg-v2-2022-content-disposition-target']?.length === 5;
+      console.log(req.headers)
+    // if (req.headers['user-agent'].includes('Postman')) {
+    //   return res.status(HttpStatus.UNAUTHORIZED).json({
+    //     message: 'Welcome to dolima Game API. Please contact support',
+    //     code: HttpStatus.UNAUTHORIZED,
+    //     data: null,
+    //   });
+    // }
     if (isValidApp) {
       req.body.gameInfos = `GAM-${req.headers['dg-v2-2022-content-disposition']}-${req.headers['dg-v2-2022-content-disposition-target']}`;
       next();
     }
     else {
       return res.status(HttpStatus.UNAUTHORIZED).json({
-        message: '',
+        message: 'Welcome to dolima Game API. Please contact support',
         code: HttpStatus.UNAUTHORIZED,
         data: null,
       });
