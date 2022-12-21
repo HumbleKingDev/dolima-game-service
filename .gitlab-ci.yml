@@ -19,6 +19,8 @@ build-preprod:
   script:
     - docker-compose -f docker-compose.preprod.yml build
     - docker push --all-tags $CI_REGISTRY_IMAGE
+  only:
+  - preprod
 
 build:
   stage: build
