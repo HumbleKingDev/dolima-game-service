@@ -1,0 +1,86 @@
+variables:
+#  PREPROD_IMAGE_APP_TAG: registry.gitlab.com/it-du-berger/ksde/rearing-follow-up-service:1.0
+#  DEV_IMAGE_APP_TAG: registry.gitlab.com/it-du-berger/ksde/rearing-follow-up-service:1.0
+  IMAGE_TAG: "1.0"
+  
+stages:
+  - build-preprod
+  - build
+  - deploy preprod
+  - deploy prod
+
+build-preprod:
+  stage: build-preprod
+  image: docker:20.10.17
+  services:
+    - docker:20.10.17-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+  script:
+    - docker-compose -f docker-compose.preprod.yml build
+    - docker push --all-tags $CI_REGISTRY_IMAGE
+  only:
+  - preprod
+
+build:
+  stage: build
+  image: docker:20.10.17
+  services:
+    - docker:20.10.17-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+  script:
+    - docker-compose -f docker-compose.prod.yml build
+    - docker push --all-tags $CI_REGISTRY_IMAGE
+
+deploy-to-preprod:
+  stage: deploy preprod
+  image: docker:20.10.17
+  services:
+    - docker:20.10.17-dind
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_KEY")
+    - '[[ -f /.dockerenv ]] && mkdir -p ~/.ssh && echo "$KNOWN_HOST" > ~/.ssh/known_hosts'
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh-keyscan -H "$PREPROD_SERVER_IP" >> ~/.ssh/known_hosts
+  script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml down --remove-orphans 
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml pull
+    - docker-compose -H "ssh://$SERVER_USER@$PREPROD_SERVER_IP" -f docker-compose.preprod.yml up -d
+  only:
+  - preprod
+  environment:
+    name: preproduction
+    url: http://leuk-preprod.laiterieduberger.sn:3001
+
+deploy-to-prod:
+  stage: deploy prod
+  image: docker:20.10.17
+  services:
+    - docker:20.10.17-dind
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_KEY")
+    - '[[ -f /.dockerenv ]] && mkdir -p ~/.ssh && echo "$KNOWN_HOST" > ~/.ssh/known_hosts'
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh-keyscan -H "$DEV_SERVER_IP" >> ~/.ssh/known_hosts
+  script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml down --remove-orphans
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml pull 
+    - docker-compose -H "ssh://$SERVER_USER@$DEV_SERVER_IP" -f docker-compose.prod.yml up -d
+ # only:
+ #  - main
+  environment:
+    name: production
+    url: https://game-service.dolima.net

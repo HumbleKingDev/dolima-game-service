@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   prod:
-    container_name: dolima-game-service-prod
-    image: registry.gitlab.laiterieduberger.sn:5050/it/dolima-game-service:prod
+    container_name: dolima-game-service-preprod
+    image: registry.gitlab.laiterieduberger.sn:5050/it/dolima-game-service:preprod
     build:
       context: .
       dockerfile: ./Dockerfile.production

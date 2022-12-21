@@ -12,10 +12,14 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(
     rateLimit({
-      windowMs: 10 * 60 * 1000, // 
-      max: 15, // limit each IP to 100 requests per windowMs
+      windowMs: 10 * 60 * 1000,
+      max: 15,
     }),
   );
+  app.enableCors({
+    origin: ["https://game.dolima.sn"],
+    allowedHeaders: "*",
+  });
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

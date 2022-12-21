@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsOptional, IsString, Validate } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Validate } from 'class-validator';
 
 import { SNPhoneNumberValidator } from '../helpers/players.helper';
 
@@ -12,6 +12,11 @@ export class PlayersDto {
   @IsString({ message: `Player's phone number must be string.`})
   @Validate(SNPhoneNumberValidator)
   phoneNumber: string;
+
+  @IsNotEmpty({ message: `Player's email is required.` })
+  @IsString({ message: `Player's emai must be string.`})
+  @IsEmail({}, { message: 'Invalid User email.' })
+  email: string;
 
   @IsOptional()
   gameInfos: string;

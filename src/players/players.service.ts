@@ -48,6 +48,7 @@ export class PlayersService {
         });
       }
       let player = await this.__findByPhoneNumber(newPlayer.phoneNumber);
+
       let canPlayGame = true;
       if (player) {
         canPlayGame = player.gamesPlayed.every(
@@ -83,6 +84,7 @@ export class PlayersService {
       const update = {
         fullName: newPlayer.fullName,
         gamesRegistered: gamesRegistered,
+        email: newPlayer.email,
       };
       const options = { upsert: true, new: true, setDefaultsOnInsert: true };
       player = await this.model.findOneAndUpdate(query, update, options);
@@ -205,7 +207,7 @@ export class PlayersService {
       const options = { upsert: true, new: true, setDefaultsOnInsert: true };
       await this.model.findOneAndUpdate(query, update, options);
       const message = giftToWin
-        ? `BRAVO  ${player.fullName} Vous êtes l’heureux gagnant de ce lot ! Nous vous contacterons très vite.`
+        ? `BRAVO  ${player.fullName} Vous avez remporté ce lot! Nous vous contacterons très vite.`
         : "Désolé, vous n'avez pas gagné!";
       return succeed({
         code: HttpStatus.OK,
@@ -306,7 +308,7 @@ export class PlayersService {
     gameWinners: number,
     expectedWinners: number,
   ) {
-    return playerNumber % 200 === 0 && gameWinners < expectedWinners;
+    return playerNumber % 500 === 0 && gameWinners < expectedWinners;
   }
 
   async __addToWonGame(idPlayer: string, idGame: string) {

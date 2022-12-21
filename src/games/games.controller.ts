@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 
 import { InvalidCodeException } from '../exceptions/invalid-code-exception';
