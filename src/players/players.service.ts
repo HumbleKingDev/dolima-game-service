@@ -207,7 +207,7 @@ export class PlayersService {
       const options = { upsert: true, new: true, setDefaultsOnInsert: true };
       await this.model.findOneAndUpdate(query, update, options);
       const message = giftToWin
-        ? `BRAVO  ${player.fullName} Vous êtes l’heureux gagnant de ce lot ! Nous vous contacterons très vite.`
+        ? `BRAVO  ${player.fullName} Vous avez remporté ce lot! Nous vous contacterons très vite.`
         : "Désolé, vous n'avez pas gagné!";
       return succeed({
         code: HttpStatus.OK,
